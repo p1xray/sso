@@ -1,0 +1,99 @@
+# ==========================================
+# Operating System and Editor Files (Global)
+# ==========================================
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# ==========================================
+# Go (Backend, microservices, pkg, gen)
+# ==========================================
+# Compiled binaries (anywhere in the repo)
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+bin/
+
+# Test binary, built with `go test -c`
+*.test
+
+# Code coverage profiles and other test artifacts
+backend/*.out
+backend/coverage.*
+backend/*.coverprofile
+backend/profile.cov
+
+# Dependencies (we use Go modules, do not commit the vendor directory)
+vendor/
+
+# Go tools profiling files
+*.prof
+
+# ==========================================
+# Next.js / Node.js (Frontend)
+# ==========================================
+# Dependencies
+frontend/node_modules/
+frontend/.pnp
+frontend/.pnp.js
+
+# Build output directories (results of npm run build)
+frontend/dist/
+frontend/build/
+
+# Next.js
+frontend/.next/
+frontend/out/
+
+# Testing
+frontend/coverage
+
+# Logs
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+frontend/pnpm-debug.log*
+
+# Local environment variables (might contain frontend API keys)
+frontend/.env.local
+frontend/.env.development.local
+frontend/.env.test.local
+frontend/.env.production.local
+
+# Vercel
+frontend/.vercel
+
+# Typescript
+frontend/*.tsbuildinfo
+frontend/next-env.d.ts
+
+# ==========================================
+# Protobuf / Buf
+# ==========================================
+# Buf generator cache (if it creates a local directory)
+.buf/
+
+# ==========================================
+# Infrastructure (Docker, K8s, Terraform)
+# ==========================================
+# Local Docker overrides (usually contains local DB passwords/dev secrets)
+infra/docker/docker-compose.override.yml
+
+# Terraform state
+*.tfstate
+*.tfstate.*
+.terraform/
+
+# ==========================================
+# Miscellaneous
+# ==========================================
+# Secrets and keys
+*.pem
+*.key
+.env
