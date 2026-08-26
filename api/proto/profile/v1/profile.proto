@@ -1,0 +1,82 @@
+// User profile API of the SSO system. Provides reading and editing of the
+// profile data stored for authenticated users.
+
+syntax = "proto3";
+
+package profile.v1;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/p1xray/sso/backend/gen/profile/v1;profilepb";
+
+// Manages user profiles.
+service ProfileService {
+  // Returns the profile of the requested user.
+  rpc GetProfile(GetProfileRequest) returns (GetProfileResponse);
+
+  // Updates the profile of the requested user.
+  rpc EditProfile(EditProfileRequest) returns (EditProfileResponse);
+}
+
+// User's gender.
+enum Gender {
+  // Gender not specified or unknown.
+  GENDER_UNSPECIFIED = 0;
+
+  // Male.
+  GENDER_MALE = 1;
+
+  // Female.
+  GENDER_FEMALE = 2;
+}
+
+// Request for a user's profile.
+message GetProfileRequest {
+  // Identifier of the user.
+  int64 user_id = 1;
+}
+
+// User's profile data.
+message GetProfileResponse {
+  // Identifier of the user.
+  int64 user_id = 1;
+
+  // User's login name.
+  string username = 2;
+
+  // User's full display name.
+  string full_name = 3;
+
+  // User's date of birth.
+  google.protobuf.Timestamp date_of_birth = 4;
+
+  // User's gender.
+  Gender gender = 5;
+
+  // Storage key of the user's avatar; unset if the user has no avatar.
+  optional string avatar_file_key = 6;
+}
+
+// Request to update a user's profile.
+message EditProfileRequest {
+  // Identifier of the user.
+  int64 user_id = 1;
+
+  // User's full display name.
+  string full_name = 2;
+
+  // User's date of birth.
+  google.protobuf.Timestamp date_of_birth = 3;
+
+  // User's gender.
+  Gender gender = 4;
+
+  // Storage key of the user's avatar; unset if the user has no avatar.
+  optional string avatar_file_key = 5;
+}
+
+// Result of a profile update.
+message EditProfileResponse {
+  // Whether the profile was updated successfully.
+  bool success = 1;
+}

@@ -1,0 +1,123 @@
+// Authentication API of the SSO system. Covers user login, registration,
+// and consent management within OAuth 2.0 / OpenID Connect flows.
+
+syntax = "proto3";
+
+package auth.v1;
+
+import "session/v1/session.proto";
+
+option go_package = "github.com/p1xray/sso/backend/gen/auth/v1;authpb";
+
+// Authenticates users and manages their consent to the scopes requested
+// by client applications.
+service AuthService {
+  // Authenticates a user with a username and password for the ongoing
+  // authorization request and returns where to redirect the client next.
+  rpc Login(LoginRequest) returns (LoginResponse);
+
+  // Creates a new user account, authenticates it, and returns where to
+  // redirect the client next.
+  rpc Register(RegisterRequest) returns (RegisterResponse);
+
+  // Grants or denies the requested scopes on behalf of the authenticated
+  // user and returns where to redirect the client next.
+  rpc Consent(ConsentRequest) returns (ConsentResponse);
+
+  // Returns the consent card for the ongoing authorization request: the
+  // list of requested scopes with their display info and grant status.
+  rpc GetConsentCard(GetConsentCardRequest) returns (GetConsentCardResponse);
+}
+
+// Request to authenticate an existing user.
+message LoginRequest {
+  // Identifier of the ongoing authorization request (OAuth 2.0 request URI).
+  string request_uri = 1;
+
+  // User's login name.
+  string username = 2;
+
+  // User's password.
+  string password = 3;
+}
+
+// Response to a successful login.
+message LoginResponse {
+  // URI the client should be redirected to in order to continue the
+  // authorization flow.
+  string redirect_uri = 1;
+
+  // Session cookie to set in the client's browser.
+  session.v1.Cookie session_cookie = 2;
+}
+
+// Request to create a new user account.
+message RegisterRequest {
+  // Identifier of the ongoing authorization request (OAuth 2.0 request URI).
+  string request_uri = 1;
+
+  // Login name for the new account.
+  string username = 2;
+
+  // Password for the new account.
+  string password = 3;
+
+  // User's full display name.
+  string full_name = 4;
+}
+
+// Response to a successful registration.
+message RegisterResponse {
+  // URI the client should be redirected to in order to continue the
+  // authorization flow.
+  string redirect_uri = 1;
+
+  // Session cookie to set in the client's browser.
+  session.v1.Cookie session_cookie = 2;
+}
+
+// Request to grant or deny the requested scopes.
+message ConsentRequest {
+  // Identifier of the ongoing authorization request (OAuth 2.0 request URI).
+  string request_uri = 1;
+
+  // Scope codes the user consents to.
+  repeated string scopes = 2;
+
+  // Session cookies received from the client's browser.
+  repeated session.v1.Cookie cookies = 3;
+}
+
+// Response to a consent decision.
+message ConsentResponse {
+  // URI the client should be redirected to in order to continue the
+  // authorization flow.
+  string redirect_uri = 1;
+}
+
+// Request for the consent card of an ongoing authorization request.
+message GetConsentCardRequest {
+  // Identifier of the ongoing authorization request (OAuth 2.0 request URI).
+  string request_uri = 1;
+}
+
+// Consent card contents for rendering the consent screen.
+message GetConsentCardResponse {
+  // Scopes requested by the client application.
+  repeated ConsentScope scopes = 1;
+}
+
+// A single scope entry of the consent card.
+message ConsentScope {
+  // Machine-readable scope code (for example, "profile").
+  string code = 1;
+
+  // Human-readable scope name.
+  string name = 2;
+
+  // Human-readable description of what access the scope grants.
+  string description = 3;
+
+  // Whether the user has already granted this scope.
+  bool is_granted = 4;
+}

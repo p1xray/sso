@@ -99,6 +99,15 @@ infra/docker/docker-compose.override.yml
 .env
 
 # ==========================================
+# Taskfile
+# ==========================================
+# Taskfile internal cache and checksum directory
+.task/
+
+# User-specific variable overrides
+Taskfile.vars.yml
+
+# ==========================================
 # Agents
 # ==========================================
 # ZCode local configurations and sessions

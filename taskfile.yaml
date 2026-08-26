@@ -1,0 +1,21 @@
+version: '3'
+
+tasks:
+  generate:
+    aliases:
+      - gen
+    desc: 'Generate Go code from all proto files in api/proto into backend/gen'
+    sources:
+      - api/proto/**/*.proto
+    generates:
+      - backend/gen/**/*.go
+    cmds:
+      # Remove stale generated code so files from deleted protos do not linger.
+      # Only *.pb.go is removed; go.mod and other files in backend/gen are kept.
+      - rm -f backend/gen/*/*/*.pb.go
+      - >-
+        protoc
+        -I api/proto
+        api/proto/*/*/*.proto
+        --go_out=backend/gen --go_opt=paths=source_relative
+        --go-grpc_out=backend/gen --go-grpc_opt=paths=source_relative,require_unimplemented_servers=false

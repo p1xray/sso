@@ -1,0 +1,18 @@
+// Shared session primitives used across the SSO API. Types defined here are
+// imported by other API packages, such as auth and oidc.
+
+syntax = "proto3";
+
+package session.v1;
+
+option go_package = "github.com/p1xray/sso/backend/gen/session/v1;sessionpb";
+
+// A browser cookie that carries the SSO session state between the client
+// and the server.
+message Cookie {
+  // Cookie name.
+  string name = 1;
+
+  // Cookie value.
+  string value = 2;
+}

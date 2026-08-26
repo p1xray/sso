@@ -1,0 +1,101 @@
+// OpenID Connect (OAuth 2.0) provider API of the SSO system. Implements the
+// authorization and token endpoints of the authorization code flow with PKCE.
+
+syntax = "proto3";
+
+package oidc.v1;
+
+import "session/v1/session.proto";
+
+option go_package = "github.com/p1xray/sso/backend/gen/oidc/v1;oidcpb";
+
+// Implements the OpenID Connect / OAuth 2.0 protocol endpoints.
+service OidcService {
+  // Processes an authorization request: authenticates the user via session
+  // cookies and returns where to redirect the client next. Depending on the
+  // request state, the redirect continues the flow or leads to the login,
+  // registration, or consent screen.
+  rpc Authorize(AuthorizeRequest) returns (AuthorizeResponse);
+
+  // Exchanges an authorization code (with PKCE verification when applicable)
+  // for tokens.
+  rpc Token(TokenRequest) returns (TokenResponse);
+}
+
+// Authorization endpoint request (OAuth 2.0 authorization request parameters).
+message AuthorizeRequest {
+  // Requested response type(s), space-separated in OAuth 2.0
+  // (for example, "code").
+  string response_type = 1;
+
+  // Requested OIDC prompt parameter values (for example, "login").
+  repeated string prompts = 2;
+
+  // Client application identifier.
+  string client_id = 3;
+
+  // URI the authorization response is redirected to. Must match one of the
+  // redirect URIs registered for the client.
+  string redirect_uri = 4;
+
+  // PKCE code challenge derived from the code verifier.
+  string code_challenge = 5;
+
+  // PKCE code challenge transformation method ("S256" or "plain").
+  string code_challenge_method = 6;
+
+  // Opaque state value echoed back to the client in the redirect.
+  string state = 7;
+
+  // Target service identifiers the token is requested for.
+  repeated string audiences = 8;
+
+  // Requested scope codes.
+  repeated string scopes = 9;
+
+  // Session cookies received from the client's browser.
+  repeated session.v1.Cookie cookies = 10;
+}
+
+// Authorization endpoint response.
+message AuthorizeResponse {
+  // URI the client should be redirected to in order to continue the
+  // authorization flow.
+  string redirect_uri = 1;
+}
+
+// Token endpoint request.
+message TokenRequest {
+  // OAuth 2.0 grant type (for example, "authorization_code").
+  string grant_type = 1;
+
+  // Client application identifier.
+  string client_id = 2;
+
+  // Authorization code received from the authorization endpoint.
+  string code = 3;
+
+  // Redirect URI used in the authorization request; must match it exactly.
+  string redirect_uri = 4;
+
+  // PKCE code verifier for the code challenge from the authorization request.
+  string code_verifier = 5;
+}
+
+// Token endpoint response.
+message TokenResponse {
+  // Access token for the authorized scopes.
+  string access_token = 1;
+
+  // Token type (always "Bearer").
+  string token_type = 2;
+
+  // Access token lifetime in seconds.
+  int64 expires_in = 3;
+
+  // Refresh token used to obtain new access tokens.
+  string refresh_token = 4;
+
+  // OpenID Connect ID token with the authenticated user's claims.
+  string id_token = 5;
+}
