@@ -97,3 +97,13 @@ infra/docker/docker-compose.override.yml
 *.pem
 *.key
 .env
+
+# ==========================================
+# Agents
+# ==========================================
+# ZCode local configurations and sessions
+.zcode/
+.zcode-session/
+.zcode-cache/
+.zcode-checkpoints/
+.zcode.local.*
