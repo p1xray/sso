@@ -1,0 +1,22 @@
+{
+  "enabledPlugins": {
+    "gopls-lsp@claude-plugins-official": true,
+    "typescript-lsp@claude-plugins-official": true
+  },
+  "permissions": {
+    "deny": [
+      "Read(**/node_modules/**)",
+      "Edit(**/node_modules/**)",
+      "Read(**/.next/**)",
+      "Edit(**/.next/**)",
+      "Read(**/out/**)",
+      "Edit(**/out/**)",
+      "Read(**/dist/**)",
+      "Edit(**/dist/**)",
+      "Read(**/vendor/**)",
+      "Edit(**/vendor/**)",
+      "Read(**/bin/**)",
+      "Edit(**/bin/**)"
+    ]
+  }
+}
