@@ -116,3 +116,9 @@ Taskfile.vars.yml
 .zcode-cache/
 .zcode-checkpoints/
 .zcode.local.*
+
+# Claude Code local settings and worktrees
+.claude/settings.local.json
+.claude/worktrees/
+.credentials
+CLAUDE.local.md
