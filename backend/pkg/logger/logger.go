@@ -43,8 +43,8 @@ const (
 	attrInstance = "instance"
 )
 
-// Logger is the logging contract for service code. All methods take the
-// context first — the context carries the request ID into every record.
+// A Logger records structured information about each call to its Debug, Info,
+// Warn, and Error methods.
 type Logger interface {
 	// Debug logs the message at debug level.
 	Debug(ctx context.Context, msg string, args ...any)
@@ -58,10 +58,6 @@ type Logger interface {
 	// Error logs the message at error level.
 	Error(ctx context.Context, msg string, args ...any)
 
-	// Enabled reports whether records at the level would be logged; use
-	// it to guard the construction of expensive debug payloads.
-	Enabled(ctx context.Context, level slog.Level) bool
-
 	// With returns a logger whose records also carry the given
 	// attributes, e.g. With("component", "storage").
 	With(args ...any) Logger
@@ -69,6 +65,15 @@ type Logger interface {
 	// WithGroup returns a logger whose attributes appear inside the
 	// named group.
 	WithGroup(name string) Logger
+}
+
+// Leveler provides access to the logger level.
+type Leveler interface {
+	// Enabled reports whether records at the level would be logged.
+	Enabled(ctx context.Context, level slog.Level) bool
+
+	// Level returns logger level.
+	Level() slog.Level
 
 	// SetLevel changes the minimum level at runtime, for this logger and
 	// every logger derived from it.
@@ -168,6 +173,11 @@ func (l *logger) WithGroup(name string) Logger {
 		inner: l.inner.WithGroup(name),
 		level: l.level,
 	}
+}
+
+// Level returns logger level.
+func (l *logger) Level() slog.Level {
+	return l.level.Level()
 }
 
 // SetLevel changes the minimum level at runtime. The change is immediate

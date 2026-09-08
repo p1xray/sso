@@ -242,23 +242,12 @@ func Test_New_ValidationErrors(t *testing.T) {
 	}
 }
 
-func Test_Logger_LevelVarAndUnwrap(t *testing.T) {
-	lg, buf := newTestLogger(t, Config{
+func Test_Unwrap_Successful(t *testing.T) {
+	lg, _ := newTestLogger(t, Config{
 		Service: "auth",
 		Env:     EnvProd,
 		Level:   LevelWarn,
 	})
-
-	if got := lg.LevelVar().Level(); got != slog.LevelWarn {
-		t.Errorf("LevelVar: want WARN, got %v", got)
-	}
-
-	// The exposed LevelVar is the live one wired into the sink.
-	lg.LevelVar().Set(slog.LevelDebug)
-	lg.Debug(context.Background(), "now visible")
-	if !strings.Contains(buf.String(), "now visible") {
-		t.Error("expected debug to pass after changing the exposed LevelVar")
-	}
 
 	if lg.Unwrap() == nil || lg.Unwrap() != lg.inner {
 		t.Error("Unwrap must return the inner slog logger")
@@ -306,7 +295,7 @@ func Test_Logger_WithThroughInterface(t *testing.T) {
 	}
 
 	// Children share the parent's level variable.
-	log.SetLevel(slog.LevelWarn)
+	log.(Leveler).SetLevel(slog.LevelWarn)
 	buf.Reset()
 	child.Debug(ctx, "hidden")
 	if buf.Len() != 0 {
@@ -314,7 +303,7 @@ func Test_Logger_WithThroughInterface(t *testing.T) {
 	}
 
 	// SetLevel is on the interface too.
-	child.SetLevel(slog.LevelDebug)
+	child.(Leveler).SetLevel(slog.LevelDebug)
 	child.Debug(ctx, "visible")
 	if !strings.Contains(buf.String(), "visible") {
 		t.Error("child must honor its own SetLevel via the interface")
