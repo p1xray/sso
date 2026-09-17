@@ -5,4 +5,5 @@ use (
 	./pkg/logger
 	./pkg/postgresql
 	./pkg/grpcserver
+	./pkg/grpcclient
 )
