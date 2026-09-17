@@ -4,4 +4,5 @@ use (
 	./gen
 	./pkg/logger
 	./pkg/postgresql
+	./pkg/grpcserver
 )
