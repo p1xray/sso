@@ -6,4 +6,5 @@ use (
 	./pkg/postgresql
 	./pkg/grpcserver
 	./pkg/grpcclient
+	./pkg/httpserver
 )
