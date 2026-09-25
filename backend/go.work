@@ -2,9 +2,10 @@ go 1.27.0
 
 use (
 	./gen
+	./pkg/grpcclient
+	./pkg/grpcserver
+	./pkg/httpserver
 	./pkg/logger
 	./pkg/postgresql
-	./pkg/grpcserver
-	./pkg/grpcclient
-	./pkg/httpserver
+	./pkg/tracing
 )
