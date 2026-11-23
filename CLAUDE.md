@@ -11,7 +11,7 @@ SSO system implementing an OAuth 2.1 / OpenID Connect provider. Early-stage mono
   - `backend/cmd/<service>/` — deployable gRPC services: `auth`, `oidc`, `users`, `clients`.
   - `backend/cmd/gateway/` — HTTP API gateway: exposes the public endpoints and calls the gRPC services above.
   - `backend/gen/` — generated protobuf/gRPC code (via `task gen` from `api/`). Never edit by hand.
-  - `backend/pkg/` — shared modules (`logger` — slog-based logging with the `sl.Err(err)` helper and a pretty handler).
+  - `backend/pkg/` — shared modules: `logger` — slog-based logging with the `sl.Err(err)` helper and a pretty handler; `postgresql` — unified `pgxpool` construction with startup ping-retry for services; `grpcserver` — unified gRPC server construction with a notify channel and graceful shutdown bounded by a timeout; `grpcclient` — unified gRPC client connection construction with a startup readiness check and retry; `httpserver` — unified HTTP server construction with a notify channel and graceful shutdown bounded by a timeout; `tracing` — unified OpenTelemetry tracing with OTLP gRPC export, parent-based sampling and gRPC/HTTP transport handlers.
 - `frontend/` — Next.js + TypeScript fronted. Not started yet.
 - `infra/` — Infrastructure as Code (Docker, Terraform). Not started yet.
 - `scripts/` — Helper scripts for development and CI. Not started yet.
